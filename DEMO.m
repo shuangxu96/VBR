@@ -35,6 +35,5 @@ for numiter=1:maxiter
     time_vb(numiter) = sum(temp_vb); auc_vb(numiter)=sum(sum((A-T_vb).^2))/sum(A(:));
     [mean(time_cv),std(time_cv),mean(time_vb),std(time_vb)]
     [mean(auc_cv),std(auc_cv),mean(auc_vb),std(auc_vb)]
-    [median(auc_cv),std(auc_cv),median(auc_vb),std(auc_vb)]
     save(['N',num2str(N),'_M',num2str(M),'_m',num2str(m),'#',num2str(scale),'.mat'])
 end
