@@ -1,12 +1,12 @@
-function model = vbr(X, y,c0)
+function model = vbr(X, y)
 %% pre-compute some constants
 maxiter = 100; tol=1e-3;
 [M, N] = size(X);
 lam = 0;
 theta = ones(N,1);
 g0 = 1e-2*ones(N,1); h0 = 1e-4*ones(N,1);
-c0 = c0; d0 = 1e-4;
-e0 = 1; f0 = 1;
+c0 = 1e-2; d0 = 1e-4;
+e0 = 1; f0 = N;
 g = g0 + 0.5;
 c = c0 + 0.5*M;
 e = e0; f = f0;
@@ -33,6 +33,7 @@ while ~converge
     end
     %ELBO_last = ELBO(t);
     t = t + 1;
+    mu = mu_new;
 end
 gamma = theta;
 gamma(gamma<0.5) = 0; gamma(gamma>=0.5) = 1;
@@ -61,7 +62,7 @@ function [theta, mu, E_lambda,E_tau,g,e,f] = update(theta,X2,E_lambda,E_tau,Xy,h
 Omega = theta*theta'+diag(theta.*(1-theta));
 X2Omega = X2 .*Omega;
 % b
-invSigma = (E_lambda) + E_tau * X2Omega;
+invSigma = diag(E_lambda) + E_tau * X2Omega;
 Sigma = inv(invSigma);
 mu = E_tau * Sigma * bsxfun(@times, Xy, theta);
 D_w = Sigma + mu * mu';
